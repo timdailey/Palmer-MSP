@@ -2,7 +2,7 @@
 
 Rebuild of palmermotorsportspark.com, Direction B "Pit Wall". Static [Astro](https://astro.build) site, deployed to GitHub Pages.
 
-**Current scope: homepage only.** The design brief and approved references live in [`docs/design/`](docs/design/). Inner pages (Programs, Schedule, event pages, policies) were started and are parked on the `wip-inner-pages` branch. Until they are merged, homepage links to inner pages will 404.
+**Current scope: homepage and Track page (`/track/`).** The design brief and approved references live in [`docs/design/`](docs/design/). Inner pages (Programs, Schedule, event pages, policies) were started and are parked on the `wip-inner-pages` branch. Until they are merged, homepage links to inner pages will 404.
 
 ## Run it
 
@@ -64,6 +64,7 @@ No code needed for most edits — change the files in `src/content/` and push.
 - `src/content/pages/requirements.md`, `cancellation-policy.md` — migrate verbatim from the current site (merge the HPDE and Lapping copies)
 - `src/content/pages/privacy.md` — approved privacy policy (legal review)
 - `src/content/pages/accessibility.md` — date of last accessibility review
+- `src/pages/track/index.astro` — migrate the old page's other tabs: full history, videos/virtual lap (the homepage "Take a virtual lap" button points at `/track/#virtual-lap`), track walk, paddock and rules. Track photos (`src/assets/track/`) come from the current site; swap in higher-resolution originals if available.
 
 Regenerate this list with:
 

@@ -1,0 +1,333 @@
+---
+import { Picture } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import SpecStrip from '../../components/SpecStrip.astro';
+import TrackMap from '../../components/TrackMap.astro';
+import { url } from '../../lib/site';
+// Photos from the current site (TrackInfo.aspx).
+import aerialFall from '../../assets/track/aerial-fall.jpg';
+import aerialSummer from '../../assets/track/aerial-summer.png';
+import paddock from '../../assets/track/paddock-infield.jpg';
+
+// Feature list from the current Track Information page, grouped.
+const features = [
+  {
+    title: 'The circuit',
+    items: [
+      '2.3-mile, 40-foot-wide racing circuit',
+      '~190 feet of absolute elevation',
+      '~509 feet of cumulative elevation change',
+      '14 cambered and camera’d corners',
+      'Can be raced in either direction',
+      'Bidirectional apex and exit curbing',
+      'Latex polymerized asphalt',
+    ],
+  },
+  {
+    title: 'Safety',
+    items: [
+      '14 course marshal flag stations',
+      'Tire walls and tire curtains',
+      'Cabled catch fencing',
+      'Race control and timing loop',
+      'LED safety signal lights',
+      '24/7 surveillance and security',
+    ],
+  },
+  {
+    title: 'Paddock & club',
+    items: ['40 pit lane pit box stalls', 'Garages, showers and dining', 'Private club memberships'],
+  },
+];
+---
+
+<Base
+  title="Track information"
+  description="Whiskey Hill Raceway at Palmer Motorsports Park: a 2.3-mile, 40-foot-wide road course with 14 corners and ~509 feet of cumulative elevation change, raceable in either direction."
+  crumbs={[{ name: 'Track', href: '/track/' }]}
+>
+  <div class="wrap">
+    <header class="page-head">
+      <h1>Track information</h1>
+      <p class="lede">
+        Whiskey Hill Raceway sits on a mountain in central Massachusetts’ Pioneer Valley — 2.3 miles and 14 corners that can
+        be raced in either direction.
+      </p>
+    </header>
+
+    <figure class="hero-photo">
+      <Picture
+        src={aerialFall}
+        formats={['avif', 'webp']}
+        widths={[640, 1024, 1440, 1920]}
+        sizes="(max-width: 1440px) 95vw, 1312px"
+        alt="Aerial view in autumn of the track winding through hairpins and esses on a wooded hillside, with the paddock in the distance."
+        loading="eager"
+        fetchpriority="high"
+      />
+      <figcaption>~509 feet of cumulative elevation change.</figcaption>
+    </figure>
+  </div>
+
+  <div class="specs">
+    <SpecStrip />
+  </div>
+
+  <div class="wrap">
+    <section class="section" aria-labelledby="features-title">
+      <h2 id="features-title">Built for racing</h2>
+      <div class="features">
+        {
+          features.map((g) => (
+            <div class="panel group">
+              <h3>{g.title}</h3>
+              <ul>
+                {g.items.map((i) => (
+                  <li>{i}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="section map-row" aria-label="Track layout">
+      <TrackMap />
+      <div class="map-copy">
+        <h2>Either direction</h2>
+        <p>
+          The circuit can be run clockwise or counter-clockwise. Apex and exit curbing is bidirectional, and all 14 corners
+          are cambered and covered by cameras.
+        </p>
+        <p>Switch direction on the map to see how the corners renumber.</p>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="photos-title">
+      <h2 id="photos-title">From above</h2>
+      <div class="photos">
+        <figure>
+          <Picture
+            src={aerialSummer}
+            formats={['avif', 'webp']}
+            widths={[468]}
+            sizes="(max-width: 900px) 100vw, 640px"
+            alt="Summer aerial view of the full circuit looping through dense green forest on a mountaintop."
+          />
+          <figcaption>2.3-mile private road course.</figcaption>
+        </figure>
+        <figure>
+          <Picture
+            src={paddock}
+            formats={['avif', 'webp']}
+            widths={[640, 764]}
+            sizes="(max-width: 900px) 100vw, 640px"
+            alt="Aerial view of the paddock and infield: garages, parked trailers and a small infield circuit, bordered by the main track."
+          />
+          <figcaption>Paddock and infield.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section history" aria-labelledby="history-title">
+      <h2 id="history-title">History</h2>
+      <dl>
+        <div>
+          <dt>Opened</dt>
+          <dd><time datetime="2015-05-08">May 8, 2015</time></dd>
+        </div>
+        <div>
+          <dt>Recognition</dt>
+          <dd><cite>Road &amp; Track</cite> named it one of the top 10 tracks to drive in North America.</dd>
+        </div>
+      </dl>
+      <!-- TODO: migrate the full history (TrackInfo.aspx?id=div1), videos (div4), track walk (div5), paddock (div6) and rules (div7). -->
+    </section>
+
+    <div class="section ctas">
+      <section class="panel cta" aria-labelledby="drive-title">
+        <h2 id="drive-title">Drive it</h2>
+        <p>Driving school, arrive &amp; drive, open lapping and more.</p>
+        <a class="btn btn-primary" href={url('/#find-your-session')}>Find your session</a>
+      </section>
+      <section class="panel cta" aria-labelledby="rent-title">
+        <h2 id="rent-title">Rent it</h2>
+        <p>By the hour or the day, weekday or weekend.</p>
+        <a class="btn btn-secondary" href={url('/rentals/#private-rental')}>Request a quote</a>
+      </section>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page-head {
+    padding-bottom: var(--s-4);
+  }
+  figure {
+    margin: 0;
+  }
+  figure :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--r-panel);
+  }
+  figcaption {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .hero-photo :global(img) {
+    aspect-ratio: 16 / 8;
+    object-fit: cover;
+  }
+  .specs {
+    padding-top: var(--s-6);
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-3);
+  }
+  .group {
+    padding: 28px;
+  }
+  .group h3 {
+    font-size: 20px;
+    margin-bottom: var(--s-2);
+  }
+  .group ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .group li {
+    padding-block: 10px;
+    border-top: 1px solid var(--line);
+    color: var(--text-2);
+  }
+  .group li:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .map-row {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: var(--s-6);
+    align-items: center;
+  }
+  .map-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+  }
+  .map-copy h2 {
+    font-size: clamp(28px, 3vw, 36px);
+  }
+  .map-copy p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-2);
+  }
+
+  .photos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-3);
+  }
+  .photos :global(img) {
+    aspect-ratio: 764 / 416;
+    object-fit: cover;
+  }
+
+  .history dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--line);
+    border-radius: var(--r-panel);
+    overflow: hidden;
+  }
+  .history dl > div {
+    padding: var(--s-3);
+  }
+  .history dl > div + div {
+    border-left: 1px solid var(--line);
+  }
+  .history dt {
+    font-size: 13px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .history dd {
+    margin: var(--s-1) 0 0;
+    font-size: 18px;
+  }
+  .history time {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 26px;
+  }
+
+  .ctas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-3);
+  }
+  .cta {
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .cta h2 {
+    font-size: 28px;
+  }
+  .cta p {
+    color: var(--text-2);
+    font-size: 17px;
+  }
+
+  @media (max-width: 1100px) {
+    .features {
+      grid-template-columns: 1fr 1fr;
+    }
+    .map-row {
+      grid-template-columns: 1fr;
+      gap: var(--s-4);
+    }
+  }
+  @media (max-width: 900px) {
+    .photos,
+    .ctas,
+    .history dl {
+      grid-template-columns: 1fr;
+    }
+    .history dl > div + div {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+  @media (max-width: 640px) {
+    .features {
+      grid-template-columns: 1fr;
+    }
+    .group,
+    .cta {
+      padding: var(--s-3);
+    }
+    .hero-photo :global(img) {
+      aspect-ratio: 4 / 3;
+    }
+    .specs {
+      padding-top: var(--s-4);
+    }
+  }
+</style>

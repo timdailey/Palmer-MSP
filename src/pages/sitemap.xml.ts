@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 
 // Add paths here as pages are built.
-const PATHS = ['/'];
+const PATHS = ['/', '/track/'];
 
 export const GET: APIRoute = ({ site }) => {
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
