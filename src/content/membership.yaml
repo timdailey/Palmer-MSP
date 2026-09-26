@@ -1,0 +1,21 @@
+# Membership types. Prices are placeholders until confirmed: keep "[PRICE]" rather than guessing.
+- id: seasonal
+  name: Seasonal
+  order: 1
+  summary: Membership for the driving season.
+  price: '[PRICE]'
+- id: ongoing
+  name: Ongoing
+  order: 2
+  summary: Continuing membership that carries over from season to season.
+  price: '[PRICE]'
+- id: trial
+  name: Trial (test drive)
+  order: 3
+  summary: Try the club before you commit with a membership test drive.
+  price: '[PRICE]'
+- id: corporate-premium
+  name: Corporate Premium
+  order: 4
+  summary: A company membership shared by up to four people.
+  price: '[PRICE]'

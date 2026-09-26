@@ -1,0 +1,129 @@
+---
+import { SITE, url } from '../lib/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="cols">
+      <div class="col">
+        <h2>Find us</h2>
+        <address>
+          {SITE.address.street}<br />
+          {SITE.address.locality}, {SITE.address.region} {SITE.address.postalCode}<br />
+          <span class="mail">Mail: {SITE.mailing}</span>
+        </address>
+        <a href={url('/visit/#directions')}>Directions</a>
+      </div>
+      <div class="col">
+        <h2>Call or email</h2>
+        <a href={`tel:${SITE.phone.tel}`}>{SITE.phone.display}</a>
+        <a href={`tel:${SITE.tollFree.tel}`}>{SITE.tollFree.display} <span class="note">toll free</span></a>
+        <a href={`mailto:${SITE.email}`} class="email">{SITE.email}</a>
+        <span>Office {SITE.officeHours}</span>
+      </div>
+      <div class="col">
+        <h2>At the gate</h2>
+        <span>Opens 7 AM · waivers at gatehouse</span>
+        <span>Under 18? Bring a parent or guardian</span>
+        <span>93 &amp; 100 Sunoco race fuel</span>
+      </div>
+      <div class="col">
+        <h2>Follow</h2>
+        <a href={SITE.social.instagram} rel="noopener">Instagram</a>
+        <a href={SITE.social.facebook} rel="noopener">Facebook</a>
+        <a href={SITE.external.shop}>Shop</a>
+      </div>
+    </div>
+    <div class="legal">
+      <p>© {year} {SITE.name} · Private club facility, no public access</p>
+      <ul>
+        <li><a href={url('/accessibility/')}>Accessibility</a></li>
+        <li><a href={url('/privacy/')}>Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--section-gap);
+    border-top: 1px solid var(--line);
+    padding-block: var(--s-7) 36px;
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--s-5);
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-2);
+  }
+  .col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  h2 {
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.7;
+    color: var(--text);
+  }
+  address {
+    font-style: normal;
+  }
+  .mail,
+  .note {
+    color: var(--muted);
+  }
+  .mail {
+    font-size: 14px;
+  }
+  .col a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .email {
+    overflow-wrap: anywhere;
+  }
+  .legal {
+    margin-top: var(--s-4);
+    font-size: 14px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--s-1) var(--s-3);
+  }
+  .legal ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: var(--s-3);
+  }
+  .legal a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  @media (max-width: 900px) {
+    .cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 640px) {
+    .site-footer {
+      padding-block: 28px;
+    }
+    .cols {
+      grid-template-columns: 1fr;
+      gap: var(--s-3);
+      font-size: 15px;
+    }
+  }
+</style>

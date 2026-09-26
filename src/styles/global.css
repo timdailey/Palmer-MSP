@@ -1,0 +1,301 @@
+/* Fonts: self-hosted via Fontsource (font-display: swap is the Fontsource default). Latin subset only. */
+@import '@fontsource/montserrat-alternates/latin-500.css';
+@import '@fontsource/montserrat-alternates/latin-700.css';
+@import '@fontsource/montserrat-alternates/latin-800.css';
+@import '@fontsource/ibm-plex-sans/latin-400.css';
+@import '@fontsource/ibm-plex-sans/latin-500.css';
+@import '@fontsource/ibm-plex-sans/latin-600.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+@import '@fontsource/ibm-plex-mono/latin-600.css';
+
+:root {
+  /* Color */
+  --bg: #0e1113;
+  --panel: #171b1e;
+  --line: #2a3035;
+  --line-strong: #4a535a;
+  --text: #f2f4f5;
+  --text-2: #c9d0d5;
+  --muted: #a7b0b7;
+  --gold: #d9a441;
+  --gold-hover: #e8bd69;
+  --on-gold: #0e1113;
+  --green: #4ade80;
+
+  /* Type */
+  --font-display: 'Montserrat Alternates', 'Montserrat', system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Space (8px scale) */
+  --s-1: 8px;
+  --s-2: 16px;
+  --s-3: 24px;
+  --s-4: 32px;
+  --s-5: 40px;
+  --s-6: 48px;
+  --s-7: 56px;
+  --s-8: 64px;
+  --s-9: 72px;
+  --s-12: 96px;
+
+  /* Shape */
+  --r-btn: 6px;
+  --r-card: 10px;
+  --r-panel: 12px;
+
+  /* Layout */
+  --max: 1312px;
+  --gutter: 64px;
+  --section-gap: var(--s-12);
+
+  color-scheme: dark;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --gutter: 32px;
+    --section-gap: 64px;
+  }
+}
+@media (max-width: 640px) {
+  :root {
+    --gutter: 16px;
+    --section-gap: 40px;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: var(--s-2);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+img {
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--gold);
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--gold-hover);
+}
+
+/* One focus style for every interactive element. */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--s-2);
+  top: -100px;
+  z-index: 100;
+  background: var(--gold);
+  color: var(--on-gold);
+  font-weight: 600;
+  padding: 12px 18px;
+  border-radius: var(--r-btn);
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: var(--s-2);
+  color: var(--on-gold);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.wrap {
+  width: 100%;
+  max-width: calc(var(--max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 13px 22px;
+  border-radius: var(--r-btn);
+  font: 600 16px/1.2 var(--font-body);
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  border: 0;
+}
+.btn-primary {
+  background: var(--gold);
+  color: var(--on-gold);
+}
+.btn-primary:hover {
+  background: var(--gold-hover);
+  color: var(--on-gold);
+}
+.btn-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 2px solid var(--line-strong);
+  padding: 11px 20px;
+}
+.btn-secondary:hover {
+  border-color: var(--text-2);
+  color: var(--text);
+}
+.btn-lg {
+  font-size: 17px;
+  padding: 17px 28px;
+}
+.btn-secondary.btn-lg {
+  padding: 15px 26px;
+}
+
+.link-arrow {
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r-panel);
+}
+
+/* Placeholder content that must be filled in before launch. */
+.placeholder {
+  font-family: var(--font-mono);
+  color: var(--gold);
+}
+
+/* Page scaffolding for inner pages */
+.page-head {
+  padding-block: var(--s-8) var(--s-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+}
+.page-head h1 {
+  font-size: clamp(38px, 5vw, 56px);
+  line-height: 1;
+}
+.lede {
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--text-2);
+  max-width: 68ch;
+}
+@media (max-width: 640px) {
+  .lede {
+    font-size: 17px;
+  }
+}
+
+.section {
+  padding-top: var(--section-gap);
+}
+.section > h2,
+.section-title {
+  font-size: clamp(28px, 3vw, 36px);
+  margin-bottom: var(--s-3);
+}
+
+/* Long-form Markdown content */
+.prose {
+  max-width: 72ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--text-2);
+}
+.prose > * + * {
+  margin-top: 1em;
+}
+.prose h2 {
+  color: var(--text);
+  font-size: 28px;
+  margin-top: 1.6em;
+}
+.prose h3 {
+  color: var(--text);
+  font-size: 21px;
+  margin-top: 1.4em;
+}
+.prose strong {
+  color: var(--text);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.25em;
+}
+.prose li + li {
+  margin-top: 0.35em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

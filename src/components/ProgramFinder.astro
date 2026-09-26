@@ -1,0 +1,306 @@
+---
+import { getPrograms, LEVEL_FILTERS, isPlaceholder } from '../lib/programs';
+import { url } from '../lib/site';
+
+interface Props {
+  /** Page the filter links point at (keeps the no-JS links on the same page). */
+  basePath?: string;
+  headingLevel?: 'h1' | 'h2';
+  title?: string;
+  intro?: string;
+  /** Limit the mobile card list (the homepage shows four, then "All programs"). */
+  mobileLimit?: number;
+}
+const {
+  basePath = '/',
+  headingLevel: H = 'h2',
+  title = 'Find your session',
+  intro = "Filter by experience. Every program lists who it's for, what you drive and what it costs.",
+  mobileLimit,
+} = Astro.props;
+
+const programs = (await getPrograms()).filter((p) => p.data.showInFinder);
+const cards = mobileLimit ? programs.slice(0, mobileLimit) : programs;
+const filterHref = (level?: string) => `${url(basePath)}${level ? `?level=${level}` : ''}#find-your-session`;
+---
+
+<section class="finder wrap" id="find-your-session" aria-labelledby="finder-title" data-finder>
+  <div class="head">
+    <div class="intro">
+      <H id="finder-title">{title}</H>
+      <p>{intro}</p>
+    </div>
+    <nav class="chips" aria-label="Filter by experience">
+      <a href={filterHref()} data-level="" aria-current="true">All</a>
+      {
+        LEVEL_FILTERS.map((f) => (
+          <a href={filterHref(f.value)} data-level={f.value}>
+            {f.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+
+  <p class="count visually-hidden" aria-live="polite" data-count></p>
+
+  <table class="programs">
+    <thead>
+      <tr>
+        <th scope="col">Program</th>
+        <th scope="col">Who it's for</th>
+        <th scope="col">You drive</th>
+        <th scope="col">Price</th>
+        <th scope="col"><span class="visually-hidden">Details</span></th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        programs.map((p) => (
+          <tr data-levels={p.data.levels.join(' ')}>
+            <th scope="row">{p.data.title}</th>
+            <td>{p.data.whoFor}</td>
+            <td>{p.data.youDrive}</td>
+            <td class={isPlaceholder(p.data.price) ? 'price placeholder' : 'price'}>{p.data.price}</td>
+            <td class="go">
+              <a href={url(`/programs/${p.id}/`)}>
+                Dates &amp; details<span class="visually-hidden"> for {p.data.title}</span> <span aria-hidden="true">→</span>
+              </a>
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+
+  <ul class="cards">
+    {
+      cards.map((p) => (
+        <li data-levels={p.data.levels.join(' ')}>
+          <a href={url(`/programs/${p.id}/`)}>
+            <span class="card-title">{p.data.title}</span>
+            <span class="card-line">{p.data.cardLine}</span>
+            <span class="card-price">{p.data.price}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <a class="all link-arrow" href={url('/programs/')}>All programs <span aria-hidden="true">&nbsp;→</span></a>
+</section>
+
+<style>
+  .finder {
+    padding-top: var(--section-gap);
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: var(--s-3);
+    flex-wrap: wrap;
+  }
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .intro :is(h1, h2) {
+    font-size: 42px;
+    line-height: 1;
+  }
+  .intro p {
+    font-size: 18px;
+    color: var(--text-2);
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .chips a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 2px solid var(--line-strong);
+    color: var(--text);
+    font: 500 15px var(--font-body);
+    text-decoration: none;
+  }
+  .chips a:hover {
+    border-color: var(--text-2);
+  }
+  .chips a[aria-current='true'] {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--on-gold);
+    font-weight: 600;
+  }
+
+  .programs {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+  thead th {
+    text-align: left;
+    color: var(--muted);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  tbody th,
+  tbody td {
+    padding: 22px 16px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: middle;
+  }
+  tbody th {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
+  }
+  tbody td {
+    color: var(--text-2);
+  }
+  td.price {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+  }
+  td.price.placeholder {
+    color: var(--gold);
+  }
+  td.go {
+    text-align: right;
+    white-space: nowrap;
+  }
+  td.go a {
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  [hidden] {
+    display: none !important;
+  }
+
+  .cards {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .cards a {
+    text-decoration: none;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .cards a:hover {
+    border-color: var(--line-strong);
+  }
+  .card-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .card-line {
+    font-size: 15px;
+    color: var(--text-2);
+  }
+  .card-price {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .all {
+    display: none;
+  }
+
+  @media (max-width: 900px) {
+    .programs {
+      display: none;
+    }
+    .cards {
+      display: flex;
+    }
+    .all {
+      display: inline-flex;
+      align-self: flex-start;
+    }
+  }
+  @media (max-width: 640px) {
+    .finder {
+      gap: 14px;
+    }
+    .intro :is(h1, h2) {
+      font-size: 30px;
+    }
+    .intro p {
+      font-size: 16px;
+    }
+    .chips {
+      gap: 8px;
+    }
+    .chips a {
+      padding: 0 16px;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-finder]').forEach((root) => {
+    const chips = root.querySelectorAll<HTMLAnchorElement>('.chips a');
+    const items = root.querySelectorAll<HTMLElement>('[data-levels]');
+    const rows = root.querySelectorAll<HTMLElement>('tbody tr');
+    const count = root.querySelector<HTMLElement>('[data-count]');
+    const levels = new Set([...chips].map((c) => c.dataset.level ?? ''));
+
+    const apply = (level: string, announce: boolean) => {
+      chips.forEach((c) => {
+        if (c.dataset.level === level) c.setAttribute('aria-current', 'true');
+        else c.removeAttribute('aria-current');
+      });
+      items.forEach((el) => {
+        el.hidden = !!level && !(el.dataset.levels ?? '').split(' ').includes(level);
+      });
+      if (announce && count) {
+        const n = [...rows].filter((r) => !r.hidden).length;
+        count.textContent = `Showing ${n} program${n === 1 ? '' : 's'}`;
+      }
+    };
+
+    chips.forEach((chip) =>
+      chip.addEventListener('click', (e) => {
+        e.preventDefault();
+        const level = chip.dataset.level ?? '';
+        const u = new URL(window.location.href);
+        if (level) u.searchParams.set('level', level);
+        else u.searchParams.delete('level');
+        history.replaceState(null, '', u.pathname + u.search);
+        apply(level, true);
+      }),
+    );
+
+    const initial = new URL(window.location.href).searchParams.get('level') ?? '';
+    if (initial && levels.has(initial)) apply(initial, false);
+  });
+</script>

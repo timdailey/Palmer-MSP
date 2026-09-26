@@ -1,0 +1,82 @@
+---
+import { getToday, humanDate, endDay, startDay } from '../lib/events';
+import { url } from '../lib/site';
+
+const today = await getToday();
+---
+
+{
+  today && (
+    <div
+      class="status"
+      role="status"
+      data-start={startDay(today)}
+      data-end={endDay(today)}
+    >
+      <div class="wrap row">
+        <span class="now">
+          <span class="dot" aria-hidden="true" />
+          On track now: {today.data.title}, {humanDate(today)}
+        </span>
+        <span class="meta">{today.data.gate}</span>
+        {today.data.food && <span class="meta">{today.data.food}</span>}
+        <a class="more" href={url(`/schedule/${today.id}/`)}>
+          Today's schedule <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  // The page is built daily; hide the notice if it has gone stale since the last build.
+  const el = document.querySelector<HTMLElement>('.status[data-start]');
+  if (el) {
+    const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+    if (today < el.dataset.start! || today > el.dataset.end!) el.hidden = true;
+  }
+</script>
+
+<style>
+  .status {
+    background: var(--panel);
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px var(--s-4);
+    align-items: center;
+    padding-block: 12px;
+  }
+  .now {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    flex-shrink: 0;
+  }
+  .meta {
+    color: var(--muted);
+  }
+  .more {
+    margin-left: auto;
+    font-weight: 600;
+  }
+  @media (max-width: 760px) {
+    .status {
+      font-size: 14px;
+    }
+    .meta,
+    .more {
+      display: none;
+    }
+  }
+</style>

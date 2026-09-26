@@ -1,0 +1,267 @@
+---
+import Base from '../layouts/Base.astro';
+import StatusBar from '../components/StatusBar.astro';
+import TrackMap from '../components/TrackMap.astro';
+import SpecStrip from '../components/SpecStrip.astro';
+import ProgramFinder from '../components/ProgramFinder.astro';
+import EventList from '../components/EventList.astro';
+import { SITE, url } from '../lib/site';
+import { getUpcoming } from '../lib/events';
+
+const upcoming = await getUpcoming(4);
+---
+
+<Base title={SITE.name} description={SITE.description}>
+  <StatusBar />
+
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <div class="hero-copy">
+      <h1 id="hero-title">2.3 miles.<br />14 corners.<br /><span class="accent">509 feet of climb.</span></h1>
+      <p class="hero-lede">
+        Whiskey Hill Raceway sits on a mountain in central Massachusetts — a private club track built for driving schools,
+        open lapping, club racing and private rentals.
+      </p>
+      <div class="ctas">
+        <a class="btn btn-primary btn-lg" href="#find-your-session">Find your session</a>
+        <a class="btn btn-secondary btn-lg desktop-only" href={url('/track/#virtual-lap')}>Take a virtual lap</a>
+        <a class="btn btn-secondary btn-lg mobile-only" href={url('/programs/')}>Book track time</a>
+      </div>
+    </div>
+    <div class="hero-map">
+      <TrackMap />
+    </div>
+  </section>
+
+  <SpecStrip />
+
+  <ProgramFinder mobileLimit={4} />
+
+  <div class="wrap split">
+    <section class="schedule" aria-labelledby="schedule-title">
+      <div class="row-head">
+        <h2 id="schedule-title">Schedule</h2>
+        <a class="link-arrow" href={url('/schedule/')}>Full season calendar <span aria-hidden="true">&nbsp;→</span></a>
+      </div>
+      <EventList events={upcoming} />
+    </section>
+
+    <section class="member" aria-labelledby="member-title">
+      <h2 id="member-title">Membership</h2>
+      <p>
+        Seasonal, ongoing or trial. 100+ member days, priority access to track and paddock, coaching and vehicle concierge.
+      </p>
+      <a class="member-cta" href={url('/membership/')}>Compare memberships</a>
+      <a class="member-link" href={url('/membership/#test-drive')}>Try a membership test drive</a>
+    </section>
+  </div>
+
+  <div class="wrap duo">
+    <section class="panel promo" aria-labelledby="rent-title">
+      <h2 id="rent-title">Rent the track</h2>
+      <p>By the hour or the day, weekday or weekend. Add flaggers, fire and wrecker, EMT, cars and instructors.</p>
+      <a class="link-arrow" href={url('/rentals/#private-rental')}>Request a quote <span aria-hidden="true">&nbsp;→</span></a>
+    </section>
+    <section class="panel promo" aria-labelledby="corp-title">
+      <h2 id="corp-title">Corporate events</h2>
+      <p>Team-building and client days on track. Corporate Premium Membership is shared by up to four people.</p>
+      <a class="link-arrow" href={url('/rentals/#corporate')}>Plan an event <span aria-hidden="true">&nbsp;→</span></a>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .hero {
+    padding-block: var(--s-9) var(--s-8);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-7);
+    align-items: center;
+  }
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  h1 {
+    font-size: 66px;
+    line-height: 0.92;
+    letter-spacing: -0.005em;
+    text-wrap: initial;
+  }
+  .accent {
+    color: var(--gold);
+  }
+  .hero-lede {
+    font-size: 20px;
+    line-height: 1.55;
+    color: var(--text-2);
+    max-width: 560px;
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .mobile-only {
+    display: none;
+  }
+
+  .split {
+    padding-top: var(--section-gap);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-3);
+  }
+  .schedule {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .row-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: var(--s-1) var(--s-3);
+  }
+  .row-head h2 {
+    font-size: 36px;
+  }
+  .member {
+    background: var(--gold);
+    color: var(--on-gold);
+    border-radius: var(--r-panel);
+    padding: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--s-2);
+  }
+  .member h2 {
+    font-size: 30px;
+    line-height: 1;
+  }
+  .member p {
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .member-cta {
+    margin-top: auto;
+    background: var(--bg);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 15px 20px;
+    border-radius: var(--r-btn);
+    text-align: center;
+  }
+  .member-cta:hover {
+    color: var(--gold-hover);
+  }
+  .member-link {
+    color: var(--on-gold);
+    font-weight: 600;
+    text-align: center;
+    padding: 10px;
+    min-height: 44px;
+  }
+  .member-link:hover {
+    color: var(--on-gold);
+    text-decoration-thickness: 2px;
+  }
+  .member :focus-visible {
+    outline-color: var(--on-gold);
+  }
+
+  .duo {
+    padding-top: var(--section-gap);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-3);
+  }
+  .promo {
+    padding: var(--s-5);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .promo h2 {
+    font-size: 28px;
+  }
+  .promo p {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text-2);
+  }
+
+  @media (max-width: 1100px) {
+    h1 {
+      font-size: 54px;
+    }
+    .hero {
+      gap: var(--s-5);
+    }
+  }
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+    }
+    .split,
+    .duo {
+      grid-template-columns: 1fr;
+    }
+    .schedule {
+      grid-column: auto;
+    }
+  }
+  @media (max-width: 640px) {
+    .hero {
+      padding-block: var(--s-4);
+      gap: 20px;
+    }
+    .hero-copy {
+      gap: 20px;
+    }
+    h1 {
+      font-size: 38px;
+    }
+    .hero-lede {
+      font-size: 17px;
+    }
+    .ctas {
+      flex-direction: column;
+    }
+    .ctas .btn {
+      width: 100%;
+    }
+    .ctas .btn-primary {
+      padding: 16px;
+    }
+    .ctas .btn-secondary {
+      padding: 14px;
+    }
+    .desktop-only {
+      display: none;
+    }
+    .mobile-only {
+      display: inline-flex;
+    }
+    /* The mobile design leads with the finder; the map lives on the Track page. */
+    .hero-map {
+      display: none;
+    }
+    .row-head h2 {
+      font-size: 30px;
+    }
+    .member {
+      padding: var(--s-3);
+    }
+    .promo {
+      padding: var(--s-3);
+    }
+    .promo h2 {
+      font-size: 24px;
+    }
+  }
+</style>

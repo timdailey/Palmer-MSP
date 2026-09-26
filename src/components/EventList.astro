@@ -1,0 +1,138 @@
+---
+import { shortDate, startDay, endDay, isOn, type EventEntry } from '../lib/events';
+import { url } from '../lib/site';
+
+interface Props {
+  events: EventEntry[];
+  headingLevel?: 'h2' | 'h3';
+}
+const { events } = Astro.props;
+---
+
+<ol class="events">
+  {
+    events.map((e) => {
+      const s = startDay(e);
+      const end = endDay(e);
+      const on = isOn(e);
+      return (
+        <li data-type={e.data.type}>
+          <span class="date">
+            {s ? (
+              end && end !== s ? (
+                <>
+                  <time datetime={s}>{shortDate(e).split('–')[0]}</time>–<time datetime={end}>{shortDate(e).split('–')[1]}</time>
+                </>
+              ) : (
+                <time datetime={s}>{shortDate(e)}</time>
+              )
+            ) : (
+              <span class="placeholder">[DATE]</span>
+            )}
+          </span>
+          <span class="what">
+            <a class="title" href={url(`/schedule/${e.id}/`)}>
+              {e.data.title}
+            </a>
+            <span class="sub">{e.data.subtitle}</span>
+          </span>
+          {on ? (
+            <span class="badge">In progress</span>
+          ) : e.data.registerUrl ? (
+            <a class="act" href={e.data.registerUrl}>
+              {e.data.registerLabel}
+              <span class="visually-hidden"> for {e.data.title}</span> <span aria-hidden="true">→</span>
+            </a>
+          ) : null}
+        </li>
+      );
+    })
+  }
+</ol>
+
+<style>
+  .events {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  li {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--r-card);
+    padding: 10px 22px 14px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  li[hidden] {
+    display: none;
+  }
+  .date {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 18px;
+    width: 150px;
+    flex-shrink: 0;
+  }
+  .what {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+  .title {
+    color: var(--text);
+    font-weight: 600;
+    font-size: 18px;
+    text-decoration: none;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    margin-bottom: -8px;
+  }
+  .title:hover {
+    color: var(--gold-hover);
+    text-decoration: underline;
+  }
+  .sub {
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .badge {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--on-gold);
+    background: var(--green);
+    padding: 5px 12px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .act {
+    font-weight: 600;
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  @media (max-width: 640px) {
+    li {
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      padding: 16px;
+    }
+    .date {
+      width: 100%;
+      font-size: 15px;
+      color: var(--text-2);
+    }
+    .title {
+      font-size: 17px;
+    }
+  }
+</style>

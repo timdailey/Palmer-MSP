@@ -1,0 +1,256 @@
+---
+import { NAV, SITE, url } from '../lib/site';
+
+const path = Astro.url.pathname;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const isCurrent = (href: string) => path.startsWith(`${base}${href}`);
+const cartLabel = `Cart, ${SITE.cartCount} ${SITE.cartCount === 1 ? 'item' : 'items'}`;
+---
+
+<header class="site-header">
+  <div class="bar wrap">
+    <a class="logo" href={url('/')}>
+      <!-- TODO: swap the 203×95 PNG for a vector SVG of the wordmark. -->
+      <img src={url('/logo-on-dark.png')} width="203" height="95" alt="Palmer Motorsports Park home" />
+    </a>
+
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu">
+      <svg class="icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"></path></svg>
+      <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      <span class="visually-hidden">Menu</span>
+    </button>
+
+    <div class="menu" id="site-menu">
+      <nav aria-label="Main">
+        <ul>
+          {
+            NAV.map((item) => (
+              <li>
+                <a href={url(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+      <div class="utility">
+        <a class="util-link" href={SITE.external.login}>Log in</a>
+        <a class="cart" href={SITE.external.cart} aria-label={cartLabel}>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 2-1.5L21 8H6"></path><circle cx="10" cy="20" r="1.2"></circle><circle cx="17" cy="20" r="1.2"></circle></svg>
+          <span class="cart-text" aria-hidden="true">Cart ({SITE.cartCount})</span>
+        </a>
+        <a class="btn btn-primary" href={url('/programs/')}>Book track time</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    z-index: 20;
+    background: var(--bg);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: var(--s-4);
+    padding-block: 18px;
+  }
+  .logo {
+    display: flex;
+    flex-shrink: 0;
+  }
+  .logo img {
+    display: block;
+    width: 162px;
+    height: auto;
+  }
+  .menu {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+  }
+  nav {
+    margin-inline: auto;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 30px;
+  }
+  nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+  nav a:hover {
+    color: var(--gold-hover);
+  }
+  nav a[aria-current='page'] {
+    color: var(--gold);
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 8px;
+  }
+  .utility {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .util-link {
+    color: var(--text);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    white-space: nowrap;
+  }
+  .util-link:hover {
+    color: var(--gold-hover);
+  }
+  .cart {
+    color: var(--text);
+    min-width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .cart:hover {
+    color: var(--gold-hover);
+  }
+  .cart-text {
+    display: none;
+  }
+  .utility .btn {
+    white-space: nowrap;
+  }
+
+  .menu-btn {
+    display: none;
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-btn);
+    background: transparent;
+    color: var(--text);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .menu-btn .icon-close,
+  .menu-btn[aria-expanded='true'] .icon-open {
+    display: none;
+  }
+  .menu-btn[aria-expanded='true'] .icon-close {
+    display: block;
+  }
+
+  /* Compact header: disclosure menu. Without JS the menu simply stays open. */
+  @media (max-width: 1180px) {
+    .bar {
+      flex-wrap: wrap;
+      padding-block: 12px;
+    }
+    .logo img {
+      width: 115px;
+    }
+    :global(.js) .menu-btn {
+      display: inline-flex;
+    }
+    .menu {
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--s-2);
+      padding-block: var(--s-1) var(--s-2);
+    }
+    :global(.js) .menu:not(.is-open) {
+      display: none;
+    }
+    nav {
+      margin: 0;
+    }
+    ul {
+      flex-direction: column;
+      gap: 0;
+    }
+    nav a {
+      display: flex;
+      font-size: 18px;
+      min-height: 52px;
+      border-bottom: 1px solid var(--line);
+    }
+    nav a[aria-current='page'] {
+      text-decoration: none;
+      box-shadow: inset 3px 0 0 var(--gold);
+      padding-left: 12px;
+    }
+    .utility {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+    .util-link,
+    .cart {
+      min-height: 52px;
+      justify-content: flex-start;
+      font-size: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+    .cart-text {
+      display: inline;
+    }
+    .utility .btn {
+      margin-top: var(--s-2);
+      min-height: 52px;
+    }
+  }
+</style>
+
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+  const menu = document.getElementById('site-menu');
+  const compact = window.matchMedia('(max-width: 1180px)');
+
+  if (btn && menu) {
+    const setOpen = (open: boolean, returnFocus = false) => {
+      btn.setAttribute('aria-expanded', String(open));
+      menu.classList.toggle('is-open', open);
+      if (open) menu.querySelector<HTMLAnchorElement>('a')?.focus();
+      else if (returnFocus) btn.focus();
+    };
+
+    btn.addEventListener('click', () => setOpen(btn.getAttribute('aria-expanded') !== 'true'));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') setOpen(false, true);
+    });
+
+    // Close when focus or a click moves outside the header.
+    const header = btn.closest('header');
+    document.addEventListener('click', (e) => {
+      if (btn.getAttribute('aria-expanded') === 'true' && header && !header.contains(e.target as Node)) setOpen(false);
+    });
+    header?.addEventListener('focusout', (e) => {
+      if (compact.matches && btn.getAttribute('aria-expanded') === 'true' && !header.contains(e.relatedTarget as Node | null) && e.relatedTarget) setOpen(false);
+    });
+
+    compact.addEventListener('change', () => setOpen(false));
+  }
+</script>
