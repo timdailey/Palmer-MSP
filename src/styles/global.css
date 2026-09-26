@@ -220,6 +220,42 @@ a:hover {
   border-radius: var(--r-panel);
 }
 
+/* Filter chips (links that filter in place when JS is on). */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.chips a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 2px solid var(--line-strong);
+  color: var(--text);
+  font: 500 15px var(--font-body);
+  text-decoration: none;
+}
+.chips a:hover {
+  border-color: var(--text-2);
+  color: var(--text);
+}
+.chips a[aria-current='true'] {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--on-gold);
+  font-weight: 600;
+}
+@media (max-width: 640px) {
+  .chips {
+    gap: 8px;
+  }
+  .chips a {
+    padding: 0 16px;
+  }
+}
+
 /* Placeholder content that must be filled in before launch. */
 .placeholder {
   font-family: var(--font-mono);

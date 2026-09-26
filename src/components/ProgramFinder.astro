@@ -116,31 +116,6 @@ const filterHref = (level?: string) => `${url(basePath)}${level ? `?level=${leve
     font-size: 18px;
     color: var(--text-2);
   }
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .chips a {
-    display: inline-flex;
-    align-items: center;
-    min-height: 44px;
-    padding: 0 18px;
-    border-radius: 999px;
-    border: 2px solid var(--line-strong);
-    color: var(--text);
-    font: 500 15px var(--font-body);
-    text-decoration: none;
-  }
-  .chips a:hover {
-    border-color: var(--text-2);
-  }
-  .chips a[aria-current='true'] {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--on-gold);
-    font-weight: 600;
-  }
 
   .programs {
     width: 100%;
@@ -256,12 +231,6 @@ const filterHref = (level?: string) => `${url(basePath)}${level ? `?level=${leve
     }
     .intro p {
       font-size: 16px;
-    }
-    .chips {
-      gap: 8px;
-    }
-    .chips a {
-      padding: 0 16px;
     }
   }
 </style>
